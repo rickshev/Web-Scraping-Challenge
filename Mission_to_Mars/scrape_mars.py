@@ -1,12 +1,14 @@
 from splinter import Browser
 from bs4 import BeautifulSoup as bs
 import pandas as pd
+from selenium import webdriver
 import time
 
 def init_browser():
     executable_path = {"executable_path": "chromedriver.exe"}
     return Browser("chrome", **executable_path, headless=False)
 
+# create empty dictionary to store scraped Mars data
 mars_data = {}
 
 # NASA Mars news
@@ -14,8 +16,9 @@ def mars_news():
     try:
         # initialize browser, create html objects, and parse with Beautiful Soup
         browser = init_browser()
-        url1 = https://mars.nasa.gov/news/
+        url1 = 'https://mars.nasa.gov/news/'
         browser.visit(url1)
+        time.sleep(1)
         html1 = browser.html
         soup1 = bs(html1, 'html.parser')
 
@@ -42,6 +45,7 @@ def mars_image():
         browser = init_browser()
         url2 = 'https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars'
         browser.visit(url2)
+        time.sleep(1)
         html2 = browser.html
         soup2 = BeautifulSoup(html2, 'html.parser')
 
@@ -50,9 +54,7 @@ def mars_image():
         base_url = 'https://www.jpl.nasa.gov'
         featured_image_url = base_url + featured_image
 
-        # append to mars_data dictionary
-        mars_data['featured_image_url'] = featured_image_url
-
+        mars_data['featured_img_url'] = featured_image_url
         return mars_data
 
     # end browser
@@ -61,8 +63,8 @@ def mars_image():
 
 
 # Mars weather twitter
-def mars_weather():
-    try:
+# def mars_weather():
+#     try:
 
 
 # Mars info table
@@ -77,10 +79,9 @@ def mars_facts():
         mars_df.columns = ["Description", "Value"]
         mars_table = mars_df.to_html(header = False, index = False)
 
-        # append to mars_data dictionary
-        mars_data['mars_table'] = mars_table
+        mars_data['mars_facts'] = mars_table
 
-        return mars_data
+        return mars_table
     
     # end browser
     finally:
@@ -91,6 +92,7 @@ def mars_hemispheres():
         # initialize browser, create html objects, and parse with Beautiful Soup
         url4 = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
         browser.visit(url4)
+        time.sleep(1)
         html4 = browser.html
         soup4 = BeautifulSoup(html4, 'html.parser')
         
@@ -121,9 +123,8 @@ def mars_hemispheres():
             downloads = soup.find('div', class_ = 'downloads')
             img_url = downloads.find('a')['href']
             hemisphere_img_urls.append({"title": title, "img_url": img_url})
-        
-        # append to mars_data dictionary
-        mars_data['hemisphere_img_urls'] = hemisphere_img_urls
+
+            mars_data['hemisphere_img_urls'] = hemisphere_image_urls
 
         return mars_data
     
